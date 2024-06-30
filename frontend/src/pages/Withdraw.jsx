@@ -18,7 +18,16 @@ const Withdraw = () => {
           placeholder="Enter the Withdrawal Amount"
           className="w-full p-2 border border-gray-300 rounded bg-slate-300"
         />
+        <div>
+            <button
+              type="submit"
+              className="w-full py-2 px-4 mt-3  bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Submit
+            </button>
+          </div>
       </div>
+      
     </div>
   )
 }

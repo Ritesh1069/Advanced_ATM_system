@@ -15,7 +15,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Auth/>} />
-        <Route path="/Deposit" element={<Deposit/>} />
+        <Route path="/Home" element={<Deposit/>} />
         <Route path="/Transaction" element={<Transaction/>} />
         <Route path="/Withdraw" element={<Withdraw/>} />
         <Route path="/protected" element={
