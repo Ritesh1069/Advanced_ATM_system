@@ -19,8 +19,9 @@ function App() {
     <AuthProvider>
     <Router>
       <Routes>
+        <Route path="/" element={<Auth/>} />
         <Route path="/Auth" element={<Auth/>} />
-        <Route path="/" element={<Deposit/>} />
+        <Route path="/home" element={<Deposit/>} />
         <Route path="/Transaction" element={<Transaction/>} />
         <Route path="/Withdraw" element={<Withdraw/>} />
         <Route path="/Deposit" element={<Moneydeposit/>} />
