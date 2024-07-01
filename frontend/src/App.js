@@ -7,6 +7,11 @@ import Transaction from './pages/Transaction';
 import Withdraw from './pages/Withdraw';
 import { AuthProvider } from './routing/Authcont';
 import ProtectedRoute from './routing/Protected';
+import Moneydeposit from './pages/Moneydepo';
+import Moneywithdraw from './pages/MoneyWithdraw';
+import Face from './pages/Face';
+import TransactionHistory from './pages/TransactionHistory';
+import AccountBalance from './pages/Accountbalance';
 
 
 function App() {
@@ -14,10 +19,16 @@ function App() {
     <AuthProvider>
     <Router>
       <Routes>
-        <Route path="/" element={<Auth/>} />
-        <Route path="/Home" element={<Deposit/>} />
+        <Route path="/Auth" element={<Auth/>} />
+        <Route path="/" element={<Deposit/>} />
         <Route path="/Transaction" element={<Transaction/>} />
         <Route path="/Withdraw" element={<Withdraw/>} />
+        <Route path="/Deposit" element={<Moneydeposit/>} />
+        <Route path="/MoneyWithdraw" element={<Moneywithdraw/>} />
+        <Route path="/Face" element={<Face/>} />
+        <Route path="/History" element={<TransactionHistory/>} />
+        <Route path="/balance" element={<AccountBalance/>} />
+
         <Route path="/protected" element={
           <ProtectedRoute>
 
