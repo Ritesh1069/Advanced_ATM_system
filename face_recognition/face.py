@@ -2,6 +2,7 @@ import face_recognition
 import cv2
 import numpy as np
 import pandas as pd
+import time
 
 def check_face(face_db):
     # # Load the known image and encode it
@@ -12,6 +13,10 @@ def check_face(face_db):
 
     # Initialize webcam
     video_capture = cv2.VideoCapture(0)
+    
+    # Initialize timeout variables
+    start_time = time.time()
+    timeout_duration = 10  # Timeout duration in seconds
 
     while True:
         # Capture frame from webcam
@@ -34,9 +39,9 @@ def check_face(face_db):
             match = face_recognition.compare_faces([face_db], face_encoding)[0]
             if match:
                 # print("Authentication successful")
+                # # break
                 return "Authentication successful"
-                # break
-
+                
         # # Display the result
         # font = cv2.FONT_HERSHEY_SIMPLEX
         # text = "Match Found" if match else "No Match"
@@ -46,14 +51,23 @@ def check_face(face_db):
         # cv2.putText(frame, text, (50, 50), font, 1, (0, 255, 0) if match else (0, 0, 255), 2, cv2.LINE_AA)
 
         cv2.imshow('Face Recognition', frame)
+        
+        # Check timeout condition
+        elapsed_time = time.time() - start_time
+        if elapsed_time > timeout_duration:
+            # break
+            return "Face not matched"
 
         # Break the loop if 'q' is pressed
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            # break
+            return "Face not matched"
 
     # Release webcam and close windows
     video_capture.release()
     cv2.destroyAllWindows()
+    
+    return "Face not matched"
 
 if __name__=="__main__":
     # text_file_path = "R:/Git/Advanced_ATM_system/face_recognition/face.txt"
