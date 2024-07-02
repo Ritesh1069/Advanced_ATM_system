@@ -10,12 +10,17 @@ uid = None
 pin = None
 user_db = None
 
-def login(user_id, pin):
-    user_db = db.find_one({"_id": user_id, "password": pin})
+def login(user_id, user_pin):
+    global uid, pin, user_db
+    
+    user_db = db.find_one({"_id": user_id, "password": user_pin})
     if user_db:
         print("Succesfully Logged In")
-        return user_db
+        return user_id, user_pin, user_db
     else:
+        uid = None
+        pin = None
+        user_db = None
         print("Invalid Account Number or PIN")
         
 def credit(amount):
@@ -53,6 +58,10 @@ def add_to_hist(info):
     db.update_one(filter, update)
     print("History Updated")
     
+def account_info():
+    return uid, pin, user_db
+
+
 if __name__ == "__main__":
     
     uid = int(input("Enter Account Number: "))
