@@ -1,8 +1,37 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import axios from 'axios';
 
 function AuthPage() {
+  const [account_number, setNo] = useState(null);
+  const [account_pin, setPin] = useState(null);
+  const [error, setError] = useState(null); 
   const navigate = useNavigate();
+
+  const handleAccountNoChange = (event) => {
+    setNo(event.target.value);
+  };
+
+  const handleAccountPinChange = (event) => {
+    setPin(event.target.value);
+  };
+
+  const AuthUser = () => {
+    if(account_number && account_pin){
+      const formData = new FormData();
+      formData.append('account_no', account_number);
+      formData.append('account_pin', account_pin);
+      setError("Successful")
+    // axios.post('http://localhost:8080/account_login', formData)
+    // .then(response => {
+
+    // })
+    }
+    else{
+      setError("Please enter all the details")
+    }
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,6 +49,7 @@ function AuthPage() {
               type="text" 
               name="accountNumber" 
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={handleAccountNoChange}
             />
           </div>
           <div>
@@ -28,13 +58,17 @@ function AuthPage() {
               type="password" 
               name="accountPin" 
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={handleAccountPinChange}
             />
           </div>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
           <div>
             <button
               type="submit"
               className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              onClick={() => navigate('/face')}      >
+              // onClick={() => navigate('/face')}      
+              onChange={AuthUser}
+              >
               Submit
             </button>
           </div>
