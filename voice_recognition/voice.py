@@ -10,7 +10,7 @@ def determine_action(text):
     # words = nltk.word_tokenize(text.lower())
     words = text.lower()
     
-    debit_keywords = ["debit", "withdraw", "withdrawal", "take out", "remove", "spend", "reduce", "pay", "charge", "deduct", "transfer out", "cash out","want to send","make a transaction to pay"]
+    debit_keywords = ["debit", "withdraw", "withdrawal", "take out", "remove", "spend", "reduce", "pay", "charge", "deduct", "transfer out", "cash out","want to send","make a transaction to pay","have to take"]
     credit_keywords = ["credit", "deposit", "add", "increase", "top up", "fund", "receive", "put in", "load", "pay in", "transfer in","want to receive","make a transaction to receive","submit"]
     balance_keywords = ["balance", "current balance", "check balance", "account balance", "how much do I have", "remaining balance", "available balance", "amount left", "what's in my account", "funds available", "money left","check my balance","balance inquiry","account status"]
     history_keywords = ["transaction", "transactions", "transaction history", "history", "past transactions", "account activity", "recent activity", "statement", "account statement", "recent transactions", "account history", "activity log","view transactions",
@@ -92,7 +92,7 @@ def main():
     try:
         # Recognize speech using Google
         text = recognizer.recognize_google(audio)
-        print(f"You said: {text}")
+        print(f"User said: {text}")
         
         # Detect language and translate to English
         translator = Translator()
@@ -106,26 +106,26 @@ def main():
         
         if action == "debit":
             if amount !=0:
-                print(f"Debit £{amount}?")
+                return (f"Debit £{amount}?")
         elif action == "credit":
             if amount !=0:
-                print(f"Credit £{amount}?")
+                return(f"Credit £{amount}?")
         elif action == "check balance":
-            print("Check Balance?")
+            return("Check Balance?")
         elif action == "transaction history":
-            print("Transaction History?")
+            return("Transaction History?")
         elif action == "unknow action":
-            print("unknow action, Pls try again") 
+            return("unknow action, Pls try again") 
         
     except sr.UnknownValueError:
-        print("Sorry, I could not understand. Please try again.")
+        return("Sorry, I could not understand. Please try again.")
     except sr.RequestError as e:
-        print(f"Could not request results; {e}")
+        return(f"Could not request results; {e}")
     except Exception as e:
-        print(f"An error occurred: {e}. Please try again.")
+        return(f"An error occurred: {e}. Please try again.")
 
 if __name__ == "__main__":
-    main()
+    print(main())
     # while True:
     #     txt = input("enter text: ")
     #     print(f'amount is : {extract_amount(txt)}')

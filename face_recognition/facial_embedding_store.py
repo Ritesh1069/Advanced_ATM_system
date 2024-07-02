@@ -21,4 +21,4 @@ print(temp)
 #writing the embeddings to a text file
 text_file_path = "R:/Git/Advanced_ATM_system/face_recognition/face.txt"
 with open(text_file_path, 'r') as f:
-    np.savetxt(f, known_encoding.reshape(1, -1), delimiter=',', fmt='%f'
+    np.savetxt(f, known_encoding.reshape(1, -1), delimiter=',', fmt='%f')
