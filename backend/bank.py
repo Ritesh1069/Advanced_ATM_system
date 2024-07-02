@@ -6,21 +6,23 @@ database = client["Bank"]
 db = database['user_info']
 
 #global variables
-uid = None
-pin = None
-user_db = None
+uid = False
+pin = False
+user_db = False
 
 def login(user_id, user_pin):
     global uid, pin, user_db
     
     user_db = db.find_one({"_id": user_id, "password": user_pin})
     if user_db:
+        uid = user_id
+        pin = user_pin
         print("Succesfully Logged In")
         return user_id, user_pin, user_db
     else:
-        uid = None
-        pin = None
-        user_db = None
+        uid = False
+        pin = False
+        user_db = False
         print("Invalid Account Number or PIN")
         
 def credit(amount):
