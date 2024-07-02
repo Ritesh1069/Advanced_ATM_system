@@ -18,7 +18,7 @@ def login():
     global account_no, account_pin, user_db
     
     try:
-        temp_account_no = request.form['account__no']
+        temp_account_no = request.form['account_no']
         temp_account_pin = request.form['account_pin']
         account_no, account_pin, user_db = bank.login(int(temp_account_no), int(temp_account_pin))
         return {'message': 'Login Successful'}
