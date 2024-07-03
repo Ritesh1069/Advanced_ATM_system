@@ -6,7 +6,7 @@ import axios from 'axios';
 function AuthPage() {
   const [account_number, setNo] = useState(null);
   const [account_pin, setPin] = useState(null);
-  const [error, setError] = useState("Hello"); 
+  const [error, setError] = useState(null); 
   const navigate = useNavigate();
 
   const handleAccountNoChange = (event) => {
