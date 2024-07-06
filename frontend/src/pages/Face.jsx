@@ -1,6 +1,5 @@
 import React from 'react';
 import Acc from '../components/Acc';
-import Unreach from '../components/Unreach';
 import { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +8,6 @@ const Face = () => {
   const [message, setMessage] = useState(null);
   const [timer, setTimer] = useState(null);
   const navigate = useNavigate();
-  const prevMess = 5
   useEffect(() => {
     axios.post('http://localhost:8080/get_info')
     .then(response => {
@@ -26,7 +24,7 @@ const Face = () => {
       setInfo("Error")
       navigate('/Unreach')
     })
-  },[])
+  },[]);
 
   const authFace = () => {
     if(info.face_embedding){
@@ -54,6 +52,9 @@ const Face = () => {
         setMessage("Unable to open Camera.")
       }
       )
+    }
+    else{
+      setMessage("Missing User's Face Data in DataBase.")
     }
 }   
   // const getInfo = () => {

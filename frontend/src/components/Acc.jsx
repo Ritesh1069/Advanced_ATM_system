@@ -9,7 +9,7 @@ const Acc = (props) => {
 }
 
 Acc.defaultProps= {
-  account_no: "Error"
+  account_no: "Loading..."
 }
 
 export default Acc

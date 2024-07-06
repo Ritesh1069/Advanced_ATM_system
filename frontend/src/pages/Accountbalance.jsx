@@ -1,7 +1,7 @@
 import React from 'react';
 import Acc from '../components/Acc';
 import { useNavigate } from 'react-router-dom';
-
+// account balance
 const AccountBalance = () => {
     const navigate = useNavigate();
 

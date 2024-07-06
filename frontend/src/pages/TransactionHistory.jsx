@@ -1,7 +1,7 @@
 import React from 'react';
 import Acc from '../components/Acc';
 import { useNavigate } from 'react-router-dom';
-
+// history
 const transactions = [
   { date: '2023-07-01', time: '10:00 AM', amount: 1000 },
   { date: '2023-07-02', time: '11:30 AM', amount: 2000 },
