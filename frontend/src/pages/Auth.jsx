@@ -6,7 +6,7 @@ import axios from 'axios';
 function AuthPage() {
   const [account_number, setNo] = useState(null);
   const [account_pin, setPin] = useState(null);
-  const [error, setError] = useState(null); 
+  const [message, setMessage] = useState(null); 
   const navigate = useNavigate();
 
   const handleAccountNoChange = (event) => {
@@ -26,16 +26,20 @@ function AuthPage() {
       axios.post('http://localhost:8080/account_login', formData)
       .then(response => {
         if(response.data.message=='Login Successful'){
+          setMessage("Login Successful")
           navigate('/face');
         }
         else(
-          setError("Invalid Account Number or Pin")
+          setMessage("Invalid Account Number or Pin")
         )
       })
-    
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setMessage("Error: "+error.message);
+      });
     }
     else{
-      setError("Please enter all the details")
+      setMessage("Please enter all the details")
     }
   }
 
@@ -65,7 +69,7 @@ function AuthPage() {
               name="accountPin" 
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               onChange={handleAccountPinChange}
-            />{<p className="text-red-500 mt-2">{error}</p>}
+            />{<p className="text-red-500 mt-2">{message}</p>}
           </div>
           
           <div>
