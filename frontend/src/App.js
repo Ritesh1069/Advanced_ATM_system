@@ -12,7 +12,7 @@ import Moneywithdraw from './pages/MoneyWithdraw';
 import Face from './pages/Face';
 import TransactionHistory from './pages/TransactionHistory';
 import AccountBalance from './pages/Accountbalance';
-
+import Unreach from './components/Unreach';
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
         <Route path="/Face" element={<Face/>} />
         <Route path="/History" element={<TransactionHistory/>} />
         <Route path="/balance" element={<AccountBalance/>} />
-
+        <Route path="/Unreach" element={<Unreach />} />
         <Route path="/protected" element={
           <ProtectedRoute>
 

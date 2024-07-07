@@ -1,15 +1,35 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Acc from '../components/Acc';
-
+import { useState, useEffect } from 'react'
+import axios from 'axios';
+// Withdraw confirmation
 const Moneywithdraw = () => {
+  const [info, setInfo] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { amount } = location.state || { amount: 0 };
 
+  useEffect(() => {
+    axios.post('http://localhost:8080/get_info')
+    .then(response => {
+      if (response.data.message == 'Success' && response.data.face_status){
+        setInfo(response.data.user_db)
+      }
+      else{
+        axios.post('http://localhost:8080/logout')
+        navigate('/')
+      }
+    })
+    .catch(error => {
+      setInfo("Error")
+      navigate('/Unreach')
+    })
+  },[])
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <Acc />
+      <Acc account_no = {info._id}/>
       <div className="bg-white p-8 rounded-lg shadow-md w-96 text-center">
         <div className="flex items-center justify-center mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-500" viewBox="0 0 20 20" fill="currentColor">

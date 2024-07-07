@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from backend import bank
+from backend import bank, face
 
 app = Flask(__name__)
 CORS(app)
@@ -9,13 +9,14 @@ CORS(app)
 account_no = False
 account_pin = False
 user_db = False
+face_status = False
 
-def show_info():
-    return account_no, account_pin, user_db
+# def show_info():
+#     return account_no, account_pin, user_db, face_status
 
 @app.route('/account_login', methods=["GET", "POST"])
 def login():
-    global account_no, account_pin, user_db
+    global account_no, account_pin, user_db, face_status
     
     try:
         temp_account_no = request.form['account_no']
@@ -28,15 +29,31 @@ def login():
         account_no = False
         account_pin = False
         user_db = False
+        face_status = False
         return {'message': 'Login Unsuccessful'}
 
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
-    global account_no, account_pin, user_db
+    global account_no, account_pin, user_db, face_status
     account_no = False
     account_pin = False
     user_db = False
+    face_status = False
     return {'message': 'Logged out'} 
+
+@app.route('/get_info', methods=["GET", "POST"])
+def info():
+    global account_no, account_pin, user_db, face_status
+    if account_no and account_pin and user_db:
+        return {'user_db' : user_db, 'message' : "Success", 'face_status': face_status}
+    else:
+        return {'user_db' : None, 'message' : "Unsuccess", 'face_status': False}
+
+@app.route('/face_auth', methods=["GET", "POST"])
+def auth_face():
+    global account_no, account_pin, user_db, face_status
+    face_status = face.check_face(user_db['face_embedding'])
+    return {'message': face_status}
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
