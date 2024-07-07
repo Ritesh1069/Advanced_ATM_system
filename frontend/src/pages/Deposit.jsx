@@ -55,6 +55,16 @@ const Deposit = () => {
           </div>
         </button>
       </div>
+
+      <div className='flex justify-center'>
+        <button
+          type="submit"
+          className="py-2 px-10 mt-5 bg-blue-500 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={() => {axios.post('http://localhost:8080/logout'); navigate('/');}}
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 }
