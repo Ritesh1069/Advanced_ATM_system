@@ -35,22 +35,22 @@ const Deposit = () => {
     handleSubmit();
   };
 
-  // useEffect(() => {
-  //   axios.post('http://localhost:8080/get_info')
-  //   .then(response => {
-  //     if (response.data.message == 'Success' && response.data.face_status){
-  //       setInfo(response.data.user_db)
-  //     }
-  //     else{
-  //       axios.post('http://localhost:8080/logout')
-  //       navigate('/')
-  //     }
-  //   })
-  //   .catch(error => {
-  //     setInfo("Error")
-  //     navigate('/Unreach')
-  //   })
-  // },[])
+  useEffect(() => {
+    axios.post('http://localhost:8080/get_info')
+    .then(response => {
+      if (response.data.message == 'Success' && response.data.face_status){
+        setInfo(response.data.user_db)
+      }
+      else{
+        axios.post('http://localhost:8080/logout')
+        navigate('/')
+      }
+    })
+    .catch(error => {
+      setInfo("Error")
+      navigate('/Unreach')
+    })
+  },[])
 
 
   return (

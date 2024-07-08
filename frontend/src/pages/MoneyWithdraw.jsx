@@ -10,22 +10,22 @@ const Moneywithdraw = () => {
   const location = useLocation();
   const { amount } = location.state || { amount: 0 };
 
-  // useEffect(() => {
-  //   axios.post('http://localhost:8080/get_info')
-  //   .then(response => {
-  //     if (response.data.message == 'Success' && response.data.face_status){
-  //       setInfo(response.data.user_db)
-  //     }
-  //     else{
-  //       axios.post('http://localhost:8080/logout')
-  //       navigate('/')
-  //     }
-  //   })
-  //   .catch(error => {
-  //     setInfo("Error")
-  //     navigate('/Unreach')
-  //   })
-  // },[])
+  useEffect(() => {
+    axios.post('http://localhost:8080/get_info')
+    .then(response => {
+      if (response.data.message == 'Success' && response.data.face_status){
+        setInfo(response.data.user_db)
+      }
+      else{
+        axios.post('http://localhost:8080/logout')
+        navigate('/')
+      }
+    })
+    .catch(error => {
+      setInfo("Error")
+      navigate('/Unreach')
+    })
+  },[])
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
