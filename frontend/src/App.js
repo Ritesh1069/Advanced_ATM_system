@@ -30,13 +30,6 @@ function App() {
         <Route path="/History" element={<TransactionHistory/>} />
         <Route path="/balance" element={<AccountBalance/>} />
         <Route path="/Unreach" element={<Unreach />} />
-        <Route path="/protected" element={
-          <ProtectedRoute>
-
-
-          
-          </ProtectedRoute>
-        } />
       </Routes>
     </Router>
   </AuthProvider>

@@ -2,17 +2,35 @@ import React from 'react';
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Acc from '../components/Acc';
-import Modal from '../components/Modal'; // Import the Modal component
 import axios from 'axios';
+
 // withdraw
+
 const Withdraw = () => {
   const [info, setInfo] = useState([]);
-  const [balance, setBalance] = useState(1000);
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = 'You will be logged out if you exit. Are you sure you want to leave?';
+    };
+
+    const handleUnload = () => {
+      axios.post('http://localhost:8080/logout');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, []);
+  
   useEffect(() => {
     axios.post('http://localhost:8080/get_info')
     .then(response => {
@@ -28,34 +46,37 @@ const Withdraw = () => {
       setInfo("Error")
       navigate('/Unreach')
     })
-  },[])
-  
-  const handleSubmit = () => {
-    const withdrawalAmount = parseFloat(amount);
-    if (isNaN(withdrawalAmount) || withdrawalAmount <= 0) {
+  },[amount])
+
+  const handleSubmit = () =>{
+    if(amount) {
+      if (isNaN(amount) || amount <= 0){
       setError('Please enter a valid amount');
-      return;
     }
-
-    if (withdrawalAmount > balance) {
-      setError('Insufficient funds');
-    } else {
-      setBalance(balance - withdrawalAmount); // Update balance
-      navigate('/moneywithdraw', { state: { amount: withdrawalAmount } });
+    else{
+      const formData = new FormData();
+      formData.append('amount', amount);
+      axios.post('http://localhost:8080/debit_money', formData)
+      .then(response => {
+        if(response.data.message == true){
+          setError('Successful.');
+          navigate('/moneywithdraw', { state: { amount: amount } });
+        }
+        else if(response.data.message == false){
+          setError('Insufficient funds');
+        }
+        else{
+          setError('Some Unexpected Error occurred! Please Login Again.');
+        }
+      })
+      .catch(error => {
+        setError("Error: "+error.message);
+      })
     }
-  };
-
-  const handleMicClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleConfirmWithdrawal = () => {
-    setIsModalOpen(false);
-    handleSubmit();
+  }
+  else{
+    setError("Please enter some amount.");
+  }  
   };
 
   return (

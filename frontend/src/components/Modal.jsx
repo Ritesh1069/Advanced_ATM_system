@@ -8,7 +8,7 @@ const Modal = ({ isOpen, onClose, onConfirm, amount }) => {
       <div className="bg-white p-6 rounded-lg shadow-md w-80 text-center">
         <h2 className="text-lg font-bold mb-4">Listening...</h2>
         <p className="mb-4">Please confirm the amount</p>
-        <p className="text-2xl font-bold mb-4">1000 Rs</p>
+        <p className="text-2xl font-bold mb-4">{amount}</p>
         <div className="flex justify-center">
           <button
             onClick={onClose}

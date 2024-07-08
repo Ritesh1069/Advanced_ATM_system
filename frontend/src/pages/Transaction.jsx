@@ -1,15 +1,55 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Acc from '../components/Acc';
+import { useState, useEffect } from 'react'
+import axios from 'axios';
+
 // deposit confirmation
 const Transaction = () => {
+  const [info, setInfo] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { depositAmount } = location.state || { depositAmount: 0 };
 
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = 'You will be logged out if you exit. Are you sure you want to leave?';
+    };
+
+    const handleUnload = () => {
+      axios.post('http://localhost:8080/logout');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, []);
+  
+  useEffect(() => {
+    axios.post('http://localhost:8080/get_info')
+    .then(response => {
+      if (response.data.message == 'Success' && response.data.face_status){
+        setInfo(response.data.user_db)
+      }
+      else{
+        axios.post('http://localhost:8080/logout')
+        navigate('/')
+      }
+    })
+    .catch(error => {
+      setInfo("Error")
+      navigate('/Unreach')
+    })
+  },[])
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <Acc />
+      <Acc account_no={info._id} />
       <div className="bg-white p-8 rounded-lg shadow-md w-96 text-center">
         <div className="flex items-center justify-center mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-500" viewBox="0 0 20 20" fill="currentColor">
@@ -17,10 +57,10 @@ const Transaction = () => {
           </svg>
         </div>
         <p className="text-lg font-semibold mb-2">Successfully Deposited</p>
-        <p className="text-2xl font-bold">{depositAmount} Rs</p>
+        <p className="text-2xl font-bold">£{depositAmount}</p>
         <button
           className="mt-6 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 px-6"
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/home')}
         >
           Back
         </button>

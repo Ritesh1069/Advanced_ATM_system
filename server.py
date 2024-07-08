@@ -30,11 +30,13 @@ def login():
         account_pin = False
         user_db = False
         face_status = False
+        bank.logout()
         return {'message': 'Login Unsuccessful'}
 
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
     global account_no, account_pin, user_db, face_status
+    bank.logout()
     account_no = False
     account_pin = False
     user_db = False
@@ -43,17 +45,54 @@ def logout():
 
 @app.route('/get_info', methods=["GET", "POST"])
 def info():
-    global account_no, account_pin, user_db, face_status
+    global account_no, account_pin, user_db, face_status 
     if account_no and account_pin and user_db:
+        account_no, account_pin, user_db = bank.login(int(account_no), int(account_pin))
         return {'user_db' : user_db, 'message' : "Success", 'face_status': face_status}
     else:
-        return {'user_db' : None, 'message' : "Unsuccess", 'face_status': False}
+        return {'user_db' : None, 'message' : "Unsuccess", 'face_status': face_status}
 
 @app.route('/face_auth', methods=["GET", "POST"])
 def auth_face():
     global account_no, account_pin, user_db, face_status
-    face_status = face.check_face(user_db['face_embedding'])
-    return {'message': face_status}
+    if account_no and account_pin and user_db:
+        account_no, account_pin, user_db = bank.login(int(account_no), int(account_pin))
+        face_status = face.check_face(user_db['face_embedding'])
+        return {'message': face_status}
+    else:
+        return {'message': face_status}
+
+@app.route('/bank_info', methods=["GET", "POST"]) #this function shows the current values of the variables in the bank.py module
+def bank_info():
+    return jsonify(bank.account_info())
+
+@app.route('/debit_money', methods=["GET", "POST"])
+def debit_money():
+    global account_no, account_pin, user_db, face_status
+    try:
+        amount = request.form['amount']
+        if account_no and account_pin and user_db and face_status: 
+            temp_status = bank.debit(float(amount))
+            account_no, account_pin, user_db = bank.login(int(account_no), int(account_pin))
+            return {'message': temp_status}
+        else:
+            return {'message' : "Some Unexpected Error occurred! Please Login Again"}
+    except Exception as e:
+        return {'message' : "Some Unexpected Error occurred! Please Login Again"}
+
+@app.route('/credit_money', methods=["GET", "POST"])
+def credit_money():
+    global account_no, account_pin, user_db, face_status
+    try:
+        amount = request.form['amount']
+        if account_no and account_pin and user_db and face_status: 
+            temp_status = bank.credit(float(amount))
+            account_no, account_pin, user_db = bank.login(int(account_no), int(account_pin))
+            return {'message': temp_status}
+        else:
+            return {'message' : "Some Unexpected Error occurred! Please Login Again."}
+    except Exception as e:
+        return {'message' : "Some Unexpected Error occurred! Please Login Again"}
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

@@ -4,35 +4,50 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import Modal from '../components/Modal';
 import axios from 'axios';
-
+//Home page
 const Deposit = () => {
   const [info, setInfo] = useState([]);
-  const [amount, setAmount] = useState('');
-  const [action, setAction] = useState('');
+  // const [amount, setAmount] = useState('');
+  // const [action, setAction] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
-   const handleSubmit = () => {
-    const depositAmount = parseFloat(amount);
+  const navigate = useNavigate();  
 
-    if (isNaN(depositAmount) || depositAmount <= 0) {
-      setAction('Invalid amount. Please enter a valid amount.');
-    } else {
-      setAction('');
-      navigate('/transaction', { state: { depositAmount } });
-    }
-  };
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Display a message to the user
+      event.preventDefault();
+      event.returnValue = 'You will be logged out if you exit. Are you sure you want to leave?';
+    };
 
+    const handleUnload = () => {
+      axios.post('http://localhost:8080/logout');
+    };
+
+    // Add event listeners
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
+
+    // Cleanup the event listeners on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, []);
+  
   const handleMicClick = () => {
+    // alert("Modal Clicked")
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
+    // alert("Modal Closed")
     setIsModalOpen(false);
   };
 
   const handleConfirmDeposit = () => {
+    // alert("Modal Submitted")
     setIsModalOpen(false);
-    handleSubmit();
+    // handleSubmit();
   };
 
   useEffect(() => {
@@ -61,28 +76,28 @@ const Deposit = () => {
         <button className="bg-blue-500 text-white py-6 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" 
           onClick={() => navigate('/Withdraw')} >
           <div className="flex items-center space-x-2">
-          <img src='/cash-withdrawal 2.png' height={56} width={56}/>
+          <img src='/cash-withdrawal 2.png' alt='withdraw' height={56} width={56}/>
             <span className='font-bold'>Withdraw Money</span>
           </div>
         </button>
         <button className="bg-green-500 text-white py-10 px-9 rounded shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50
          " onClick={() => navigate('/Deposit')}>
           <div className="flex items-center space-x-2">
-          <img src='/deposit 2.png' height={56} width={56}/>
+          <img src='/deposit 2.png' alt='Deposit' height={56} width={56}/>
             <span className="font-bold">Deposit Money</span>
           </div>
         </button>
         <button className="bg-yellow-500 text-white py-10 px-4 rounded shadow hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
         onClick={() => navigate('/Balance')}>
           <div className="flex items-center space-x-2">
-          <img src='/cash 1.png' height={56} width={56}/>
+          <img src='/cash 1.png' alt='Check Balance' height={56} width={56}/>
             <span className='font-bold'>Check Balance</span>
           </div>
         </button>
         <button className="bg-red-500 text-white py-10 px-12 rounded shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
         onClick={() => navigate('/History')}>
           <div className="flex items-center space-x-2">
-          <img src='/evaluation (1) 1.png' height={56} width={56}/>
+          <img src='/evaluation (1) 1.png' alt='Transaction History' height={56} width={56}/>
             <span className='font-bold'>Transactions Statement</span>
           </div>
         </button>
@@ -106,11 +121,13 @@ const Deposit = () => {
           <path d="M5 8v2a5 5 0 0010 0V8h-1v2a4 4 0 01-8 0V8H5z" />
         </svg>
       </button>
+
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onConfirm={handleConfirmDeposit}
-        amount={amount}
+        amount={1000}
+        // amount
       />
       </div>
     </div>
