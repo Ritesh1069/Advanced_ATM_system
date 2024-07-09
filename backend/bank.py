@@ -1,7 +1,7 @@
 import pandas as pd
 import pymongo 
 from datetime import datetime
-client = pymongo.MongoClient("mongodb+srv://riteshmmaurya2004:12345@bank.aonwqsd.mongodb.net/?retryWrites=true&w=majority&appName=Bank")
+client = pymongo.MongoClient("mongodb+srv://azizsk101:5dwypmWEpuRYsN2X@bank.xvf3yvk.mongodb.net/?retryWrites=true&w=majority&appName=Bank")
 database = client["Bank"]
 db = database['user_info']
 
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     uid = int(input("Enter Account Number: "))
     pin =  int(input("Enter PIN: "))
     user_db = login(uid, pin)
-    # print(user_db["_id"])
+    print(user_db)
     # amount = float(input("amount: "))
     # credit(amount)
     # debit(amount)
