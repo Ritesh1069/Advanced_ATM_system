@@ -30,7 +30,7 @@ def credit(amount):
         user_db = db.find_one({"_id": int(uid), "password": int(pin)})
         new_balance = user_db["balance"]+amount
         db.update_one(user_db, {"$set": {"balance": new_balance}})
-        add_to_hist(f"credited {amount}")
+        add_to_hist(f"Credited   {amount}")
         # return (f"Successfully Credited {amount} into your account")
         return True
     else:
@@ -46,7 +46,7 @@ def debit(amount):
         else:
             new_balance = user_db["balance"] - amount
             db.update_one(user_db, {"$set": {"balance": new_balance}})
-            add_to_hist(f"debited {amount}")
+            add_to_hist(f"Debited  {amount}")
             # return (f"Successfully Debited {amount} from your account")
             return True
     else:
@@ -76,7 +76,7 @@ def add_to_hist(info):
         for i in range(0,4):
             temp[i] = user_db["history"][i+1]
         dt = datetime.now().strftime("%d/%m/%Y  %H:%M:%S")
-        temp[4] = dt + " "+info
+        temp[4] = dt + "  "+info
         # db.update_one(user_db, {"$set": {"history": temp}}) # not working dk why
         filter = {"_id": user_db["_id"]}
         update = {"$set": {"history": temp}}

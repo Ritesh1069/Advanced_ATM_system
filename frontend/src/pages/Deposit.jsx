@@ -7,11 +7,10 @@ import axios from 'axios';
 //Home page
 const Deposit = () => {
   const [info, setInfo] = useState([]);
-  // const [amount, setAmount] = useState('');
-  // const [action, setAction] = useState('');
+  const [amount, setAmount] = useState(null);
+  const [action, setAction] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();  
-
+  const navigate = useNavigate();   
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       // Display a message to the user
@@ -36,18 +35,132 @@ const Deposit = () => {
   
   const handleMicClick = () => {
     // alert("Modal Clicked")
+    setAction(null);
+    setAmount(null);
     setIsModalOpen(true);
+    axios.post('http://localhost:8080/voice')
+    .then(response => {
+      if (response.data.status == "Success"){
+        if(response.data.action == "Debit"){
+          // alert("Debit?"+response.data.amount)
+          setAction('Debit')
+          setAmount(response.data.amount)
+        }
+        else if(response.data.action == "Credit"){
+          // alert("Credit?"+response.data.amount)
+          setAction('Credit')
+          setAmount(response.data.amount)
+        }
+        else if(response.data.action == "Check Balance"){
+          // alert("Check balance?")
+          setAction('Check Balance')
+          setAmount(null)
+        }
+        else if(response.data.action == "Transaction History"){
+          // alert("Transaction History?")
+          setAction('Transaction History')
+          setAmount(null)
+        }
+      }
+      else{
+        alert(response.data.action)
+        handleCloseModal();
+      }
+    })
+    .catch(error =>{
+      alert("error: "+error.message)
+      handleCloseModal();
+    })
   };
 
   const handleCloseModal = () => {
     // alert("Modal Closed")
+    setAction(null);
+    setAmount(null);
     setIsModalOpen(false);
   };
 
   const handleConfirmDeposit = () => {
-    // alert("Modal Submitted")
+    if(action == "Debit"){
+      // alert("Debiting amount")
+      if(amount) {
+        if (isNaN(amount) || amount <= 0){
+        alert('Please enter a valid amount');
+        handleCloseModal();
+      }
+      else{
+        const formData = new FormData();
+        formData.append('amount', amount);
+        axios.post('http://localhost:8080/debit_money', formData)
+        .then(response => {
+          if(response.data.message == true){
+            // setError('Successful.');
+            handleCloseModal();
+            navigate('/moneywithdraw', { state: { amount: amount } });
+          }
+          else if(response.data.message == false){
+            alert('Insufficient funds');
+            handleCloseModal();
+          }
+          else{
+            alert('Some Unexpected Error occurred! Please Login Again.');
+            handleCloseModal();
+          }
+        })
+        .catch(error => {
+          alert("Error: "+error.message);
+          handleCloseModal();
+        })
+      }
+    }
+    else{
+      alert("Please mention some amount.");
+      handleCloseModal();
+    } }
+    else if(action == "Credit"){
+      // alert("Crediting Amount")
+      if(amount) {
+        if (isNaN(amount) || amount <= 0){
+        alert('Please enter a valid amount');
+        handleCloseModal();
+      }
+      else{
+        const formData = new FormData();
+        formData.append('amount', amount);
+        axios.post('http://localhost:8080/credit_money', formData)
+        .then(response => {
+          if(response.data.message == true){
+            // setError('Successful.');
+            handleCloseModal();
+            navigate('/transaction', { state: { depositAmount: amount } });
+          }
+          else if(response.data.message == false){
+            alert('Transaction Failed.');
+            handleCloseModal();
+          }
+          else{
+            alert('Some Unexpected Error occurred! Please Login Again.');
+            handleCloseModal();
+          }
+        })
+        .catch(error => {
+          alert("Error: "+error.message);
+          handleCloseModal();
+        })
+      }
+    }
+    else{
+      alert("Please mention some amount.");
+      handleCloseModal();
+    }
+    }
+    else if(action == 'Check Balance'){
+      navigate('/balance')
+    }
+    else if(action == 'Transaction History'){
+      navigate('/history')
+    }
     setIsModalOpen(false);
-    // handleSubmit();
   };
 
   useEffect(() => {
@@ -126,8 +239,8 @@ const Deposit = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onConfirm={handleConfirmDeposit}
-        amount={1000}
-        // amount
+        amount={amount}
+        action={action}
       />
       </div>
     </div>

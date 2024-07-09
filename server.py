@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from backend import bank, face
+from backend import bank, face, voice
 
 app = Flask(__name__)
 CORS(app)
@@ -93,6 +93,16 @@ def credit_money():
             return {'message' : "Some Unexpected Error occurred! Please Login Again."}
     except Exception as e:
         return {'message' : "Some Unexpected Error occurred! Please Login Again"}
-
+    
+@app.route('/voice', methods=["GET", "POST"])
+def voice_recognition():
+    global account_no, account_pin, user_db, face_status
+    if account_no and account_pin and user_db and face_status:
+        account_no, account_pin, user_db = bank.login(int(account_no), int(account_pin))
+        temp_status,temp_action,temp_amount=voice.main()
+        return {'status':temp_status ,'action': temp_action,'amount': temp_amount}
+    else:
+        return {'status': "Unsuccess" ,'action': "Some Unexpected Error occurred! Please Login Again",'amount': False}
+    
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
