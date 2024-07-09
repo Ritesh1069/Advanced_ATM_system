@@ -11,6 +11,25 @@ const Moneywithdraw = () => {
   const { amount } = location.state || { amount: 0 };
 
   useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = 'You will be logged out if you exit. Are you sure you want to leave?';
+    };
+
+    const handleUnload = () => {
+      axios.post('http://localhost:8080/logout');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, []);
+  
+  useEffect(() => {
     axios.post('http://localhost:8080/get_info')
     .then(response => {
       if (response.data.message == 'Success' && response.data.face_status){
@@ -37,10 +56,10 @@ const Moneywithdraw = () => {
           </svg>
         </div>
         <p className="text-lg font-semibold mb-2">Successfully Withdrawn</p>
-        <p className="text-2xl font-bold">{amount} Rs</p>
+        <p className="text-2xl font-bold">£{amount}</p>
         <button 
           className="mt-6 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 px-6"  
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/home')}
         >
           Back
         </button>

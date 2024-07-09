@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react'
 import axios from 'axios';
@@ -9,6 +9,10 @@ function AuthPage() {
   const [message, setMessage] = useState(null); 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    axios.post('http://localhost:8080/logout')
+  }, [])
+  
   const handleAccountNoChange = (event) => {
     setNo(event.target.value);
   };

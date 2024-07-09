@@ -106,26 +106,35 @@ def main():
         
         if action == "debit":
             if amount !=0:
-                return (f"Debit £{amount}?")
+                return ("Success","Debit",amount)
+            else:
+                return ("Success","Debit",None)
         elif action == "credit":
             if amount !=0:
-                return(f"Credit £{amount}?")
+                return("Success","Credit",amount)
+            else:
+                return("Success","Credit",None)
+            
         elif action == "check balance":
-            return("Check Balance?")
+            return("Success","Check Balance",False)
         elif action == "transaction history":
-            return("Transaction History?")
+            return("Success","Transaction History",False)
         elif action == "unknow action":
-            return("unknow action, Pls try again") 
+            return("Unsuccess","Unknow Action",False) 
         
     except sr.UnknownValueError:
-        return("Sorry, I could not understand. Please try again.")
+        return("Unsuccess","Sorry, I could not understand. Please try again.",False)
     except sr.RequestError as e:
-        return(f"Could not request results; {e}")
+        return("Unsuccess",f"Could not request results; {e}",False)
     except Exception as e:
-        return(f"An error occurred: {e}. Please try again.")
+        return("Unsuccess",f"An error occurred: {e}. Please try again.",False)
 
 if __name__ == "__main__":
-    print(main())
+    status,action,amount=main()
+    print("function returned status: ", status)
+    print("function returned action: ", action)
+    print("function returned amount: ", amount)
+    # print(main())
     # while True:
     #     txt = input("enter text: ")
     #     print(f'amount is : {extract_amount(txt)}')

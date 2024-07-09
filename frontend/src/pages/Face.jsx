@@ -8,6 +8,27 @@ const Face = () => {
   const [message, setMessage] = useState(null);
   const [timer, setTimer] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = 'You will be logged out if you exit. Are you sure you want to leave?';
+    };
+
+    const handleUnload = () => {
+      axios.post('http://localhost:8080/logout');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, []);
+
+  
   useEffect(() => {
     axios.post('http://localhost:8080/get_info')
     .then(response => {
