@@ -1,2 +1,11 @@
 pymongo
 pandas
+SpeechRecognition
+pyaudio
+nltk
+googletrans==4.0.0-rc1
+face_recognition
+opencv-python
+numpy
+Flask
+Flask-Cors
