@@ -1,7 +1,7 @@
 import pandas as pd
 import pymongo 
 from datetime import datetime
-client = pymongo.MongoClient("mongodb+srv://azizsk101:5dwypmWEpuRYsN2X@bank.xvf3yvk.mongodb.net/?retryWrites=true&w=majority&appName=Bank")
+client = pymongo.MongoClient("mongodb+srv://riteshmmaurya2004:12345@bank.aonwqsd.mongodb.net/?retryWrites=true&w=majority&appName=Bank")
 database = client["Bank"]
 db = database['user_info']
 
